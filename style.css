@@ -1,0 +1,33 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* #region utilities */
+:root {
+    --body-bg: #023047;
+    --blue-tech: #000080;
+    --green-geo: #008001;
+    --purple-kitchen: #800080;
+    --salmon-journey: #f3a360;
+    --yellow-art: #ffd601;
+}
+/* #endregion utilities */ 
+.btn{
+    color: white;
+}
+.btn-geo{
+    bs-btn-color: var(--green-geo);    
+}
+.btn-tech{
+    background-color: var(--blue-tech);    
+}
+.btn-kitchen{
+    background-color: var(--purple-kitchen);    
+}
+.btn-journey{
+    background-color: var(--salmon-journey);    
+}
+.btn-art{
+    background-color: var(--yellow-art);    
+}
