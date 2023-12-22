@@ -15,9 +15,10 @@
 /* #endregion utilities */ 
 .btn{
     color: white;
+    border: 0;
 }
 .btn-geo{
-    bs-btn-color: var(--green-geo);    
+    background-color: var(--green-geo);    
 }
 .btn-tech{
     background-color: var(--blue-tech);    
