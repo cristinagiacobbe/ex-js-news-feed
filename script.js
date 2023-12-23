@@ -49,3 +49,10 @@ News.forEach((eachNew) => {
 })
 console.log(TagsType);
 
+const selTags = document.getElementById("tags")
+TagsType.forEach((tagType) => {
+    let newOption = new Option(tagType, tagType);
+    tags.append(newOption);
+})
+//console.log(tags);
+
