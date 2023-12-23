@@ -56,3 +56,11 @@ TagsType.forEach((tagType) => {
 })
 //console.log(tags);
 
+function FilterTag(selectedTag) {
+    const NewsCard = News.filter(SingleFilteredTag => {
+    return SingleFilteredTag.tags === selectedTag   
+})
+console.log(NewsCard)
+}
+
+FilterTag(TagsType[4])
