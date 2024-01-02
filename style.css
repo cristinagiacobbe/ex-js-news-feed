@@ -9,8 +9,8 @@
     --blue-tech: #000080;
     --green-geo: #008001;
     --purple-kitchen: #800080;
-    --salmon-journey: #f3a360;
-    --yellow-art: #ffd601;
+    --salmon-viaggi: #f3a360;
+    --yellow-arte: #ffd601;
 }
 /* #endregion utilities */ 
 h1{
@@ -38,9 +38,9 @@ h1{
 .btn-kitchen{
     background-color: var(--purple-kitchen);    
 }
-.btn-journey{
-    background-color: var(--salmon-journey);    
+.btn-viaggi{
+    background-color: var(--salmon-viaggi);    
 }
-.btn-art{
-    background-color: var(--yellow-art);    
+.btn-arte{
+    background-color: var(--yellow-arte);    
 }

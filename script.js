@@ -56,10 +56,10 @@ News.forEach((New) => {
     }
 
 )
-console.log(TagsArray);
+//console.log(TagsArray);
 //create a set of tags (withou duplicate)
 const Set_tags = new Set(TagsArray)
-console.log(Set_tags);
+//console.log(Set_tags);
 
 /* create select form with a dinamic logic*/
 const selTags = document.getElementById("tags")
@@ -69,16 +69,35 @@ Set_tags.forEach((Set_tag) => {
 })
 
 
+const FilteredTags = News.filter(New => {
+    if (typeof New.tags === "object") {
+        return (New.tags.find(TagEl => TagEl === "arte"));} 	
+        else {
+        return New.tags === "arte"}
+    }
+)
+console.log(FilteredTags);
 
-    const NewsCard = News.filter(SingleFilteredTag => {
-    return SingleFilteredTag.tags === "geo"      
+FilteredTags.forEach((New) => {
+const cardElement = document.querySelector(".card");
+const cardMarkup = `
+<div class="card-body">
+            <h4 class="card-title">${New.title}</h4>
+            <h5 class="card-title"> pubblicato da ${New.author}</h5>
+            <h6>in data ${New.published}</h6>
+            <p class="card-text">${New.content}</p>
+            <div>
+                <img src=${New.image} ${New.alt}>
+            </div>
+	<a href="#" class="btn btn-primary btn-${New.tags[0]}">${New.tags[0]}</a>
+	<a href="#" class="btn btn-primary btn-${New.tags[1]}">${New.tags[1]}</a>
+</div>`
+
+cardElement.insertAdjacentHTML("beforeend", cardMarkup)
 })
-console.log(NewsCard);
 
-NewsCard.forEach((SingleFilteredTag) => {
-    console.log(SingleFilteredTag.title);
 
-const cardElement = document.querySelector(".card")
+/* const cardElement = document.querySelector(".card")
 const cardMarkup = `
 <div class="card-body">
             <h4 class="card-title">${SingleFilteredTag.title}</h4>
@@ -92,6 +111,5 @@ const cardMarkup = `
             <a href="#" class="btn btn-primary btn-tech">tech</a>
         </div>
 `
-cardElement.insertAdjacentHTML("beforeend", cardMarkup)
+cardElement.insertAdjacentHTML("beforeend", cardMarkup) */
 
-})
