@@ -47,13 +47,16 @@ TagsArray = ["politic"]
 News.forEach((New) => {
 
     if (typeof New.tags === "object") {
-//case of: ["arte", "tech"]
+        //case of: ["arte", "tech"]
         for (let i = 0; i < New.tags.length; i++) {
-            TagsArray.push(New.tags[i])} }
-            else {
-//case of: "cucina"
-                TagsArray.push(New.tags); }
+            TagsArray.push(New.tags[i])
+        }
     }
+    else {
+        //case of: "cucina"
+        TagsArray.push(New.tags);
+    }
+}
 
 )
 //console.log(TagsArray);
@@ -68,20 +71,46 @@ Set_tags.forEach((Set_tag) => {
     tags.append(newOption);
 })
 
+selTags.addEventListener("change", function (e) {
+    //console.log(e.target.value);
 
-const FilteredTags = News.filter(New => {
-    if (typeof New.tags === "object") {
-        return (New.tags.find(TagEl => TagEl === "arte"));} 	
+    //Before inizialize loop refresh cards
+    const cardElement = document.querySelector(".card");
+    cardElement.innerHTML = ""
+
+    //Consider first of all case of no-target.value found into News.tags ("politic")
+    //and case of "all tags"
+    if (e.target.value === "all_tag") {
+       GenerateCard(News);} 
+    else {
+    const FilteredTags = News.filter(New => {
+        if (typeof New.tags === "object") {
+            return (New.tags.find(TagEl => TagEl === e.target.value));}
         else {
-        return New.tags === "arte"}
+            return New.tags === e.target.value;}
+    })
+    //console.log(FilteredTags);
+    if (FilteredTags.length === 0) {
+        const cardElement = document.querySelector(".card")
+        //cardElement.innerHTML = ""
+        const AlertElement = document.createElement("h2")
+        AlertElement.innerHTML = ("No news available.")
+        cardElement.appendChild(AlertElement)
+    } else {
+    GenerateCard(FilteredTags);
     }
-)
-console.log(FilteredTags);
+    }
+})
 
-FilteredTags.forEach((New) => {
-const cardElement = document.querySelector(".card");
-const cardMarkup = `
-<div class="card-body">
+/**
+ * The function create cards with filtered objects
+ * @param {Object} FilteredObj The filtered object to generate cards
+ */
+function GenerateCard(FilteredObj) {
+    FilteredObj.forEach((New) => {        
+        const cardElement = document.querySelector(".card");
+        const cardMarkup = `
+        <div class="card-body">
             <h4 class="card-title">${New.title}</h4>
             <h5 class="card-title"> pubblicato da ${New.author}</h5>
             <h6>in data ${New.published}</h6>
@@ -89,27 +118,9 @@ const cardMarkup = `
             <div>
                 <img src=${New.image} ${New.alt}>
             </div>
-	<a href="#" class="btn btn-primary btn-${New.tags[0]}">${New.tags[0]}</a>
-	<a href="#" class="btn btn-primary btn-${New.tags[1]}">${New.tags[1]}</a>
-</div>`
-
-cardElement.insertAdjacentHTML("beforeend", cardMarkup)
-})
-
-
-/* const cardElement = document.querySelector(".card")
-const cardMarkup = `
-<div class="card-body">
-            <h4 class="card-title">${SingleFilteredTag.title}</h4>
-            <h5 class="card-title">pubblicato da ${SingleFilteredTag.author}</h5>
-            <h6>in data ${SingleFilteredTag.published}</h6>
-            <p class="card-text">${SingleFilteredTag.content}</p>
-            <div>
-                <img src=${SingleFilteredTag.image} class="mb-2" alt=${SingleFilteredTag.alt}>
-            </div>
-            <a href="#" class="btn btn-primary btn-geo">${SingleFilteredTag.tags}</a>
-            <a href="#" class="btn btn-primary btn-tech">tech</a>
-        </div>
-`
-cardElement.insertAdjacentHTML("beforeend", cardMarkup) */
-
+	        <a href="#" class="btn btn-primary btn-${New.tags[0]}">${New.tags[0]}</a>
+	        <a href="#" class="btn btn-primary btn-${New.tags[1]}">${New.tags[1]}</a>
+        </div>`
+        cardElement.insertAdjacentHTML("beforeend", cardMarkup)
+    })
+}
