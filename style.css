@@ -44,3 +44,10 @@ h1{
 .btn-arte{
     background-color: var(--yellow-arte);    
 }
+h2{
+    color: white;
+    background-color: var(--body-bg);
+}
+.card{
+    border: 0;
+}
