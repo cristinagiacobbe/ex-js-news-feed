@@ -50,4 +50,13 @@ h2{
 }
 .card{
     border: 0;
+    width: 45%;
 }
+
+.fa-bookmark {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    transform: scale(1.5);     
+}
+
