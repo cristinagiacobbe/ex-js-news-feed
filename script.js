@@ -71,11 +71,44 @@ Set_tags.forEach((Set_tag) => {
     tags.append(newOption);
 })
 
+/**
+ * function to convert in format Date DD-MM-YYYY
+ * @param {Date} DateToConvert is the original date I need to convert
+ * @returns the new converted date
+ */
+function ConvertDate(DateToConvert) {
+    const formatDate = new Date(DateToConvert)
+    return (`${formatDate.getDate()}-${(formatDate.getMonth()+1) < 10 ? ("0"+(formatDate.getMonth()+1)) : (formatDate.getMonth()+1)}-${formatDate.getFullYear()}`);
+    }
+
+/**
+ * The function create cards with filtered objects
+ * @param {Object} FilteredObj The filtered object to generate cards
+ */
+function GenerateCard(FilteredObj) {
+    FilteredObj.forEach((New) => {   
+
+        const cardElement = document.querySelector(".card-body")
+        const cardMarkup = `        
+            <h4 class="card-title">${New.title}</h4>           
+            <h5 class="card-title">pubblicato da ${New.author}</h5>
+            <h6>in data ${ConvertDate(New.published)}</h6>
+            <p class="card-text">${New.content}</p>
+            <div>
+                <img src=${New.image} ${New.alt}>
+            </div>
+	        <a href="#" class="btn btn-primary btn-${New.tags[0]}">${New.tags[0]}</a>
+	        <a href="#" class="btn btn-primary btn-${New.tags[1]}">${New.tags[1]}</a>
+        `
+        cardElement.insertAdjacentHTML("beforeend", cardMarkup)
+    })
+}
+
 selTags.addEventListener("change", function (e) {
     //console.log(e.target.value);
 
     //Before inizialize loop refresh cards
-    const cardElement = document.querySelector(".card");
+    const cardElement = document.querySelector(".card-body");
     cardElement.innerHTML = ""
 
     //Consider first of all case of no-target.value found into News.tags ("politic")
@@ -91,7 +124,7 @@ selTags.addEventListener("change", function (e) {
     })
     //console.log(FilteredTags);
     if (FilteredTags.length === 0) {
-        const cardElement = document.querySelector(".card")
+        const cardElement = document.querySelector(".card-body")
         //cardElement.innerHTML = ""
         const AlertElement = document.createElement("h2")
         AlertElement.innerHTML = ("No news available.")
@@ -102,25 +135,3 @@ selTags.addEventListener("change", function (e) {
     }
 })
 
-/**
- * The function create cards with filtered objects
- * @param {Object} FilteredObj The filtered object to generate cards
- */
-function GenerateCard(FilteredObj) {
-    FilteredObj.forEach((New) => {        
-        const cardElement = document.querySelector(".card");
-        const cardMarkup = `
-        <div class="card-body">
-            <h4 class="card-title">${New.title}</h4>
-            <h5 class="card-title"> pubblicato da ${New.author}</h5>
-            <h6>in data ${New.published}</h6>
-            <p class="card-text">${New.content}</p>
-            <div>
-                <img src=${New.image} ${New.alt}>
-            </div>
-	        <a href="#" class="btn btn-primary btn-${New.tags[0]}">${New.tags[0]}</a>
-	        <a href="#" class="btn btn-primary btn-${New.tags[1]}">${New.tags[1]}</a>
-        </div>`
-        cardElement.insertAdjacentHTML("beforeend", cardMarkup)
-    })
-}
