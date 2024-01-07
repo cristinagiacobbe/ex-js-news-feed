@@ -40,7 +40,7 @@ const News = [
         image: "./images/modern-art.jpg",
         alt: "modern-art",
     }]
-let SavedNews = []
+let UnSavedNews = []
 
 //Extract each value of key "tags" and push them into a new array
 TagsArray = ["politic"]
@@ -116,9 +116,9 @@ function GenerateCard(FilteredObj) {
         //Create a data-attribute which correspond to the "id"News just for bookmark clicked
 	    console.log(cardElement.dataset.saved)
         //Filter the "clicked-bookmark cards" and insert them to the empty array I have created (script.js.43)
-        const FilteredSaved = News.filter(New => New.id === cardElement.dataset.saved)
-	    SavedNews.push(FilteredSaved)  
-        console.log(SavedNews);             
+        const FilteredUnSaved = News.filter(New => New.id !== cardElement.dataset.saved)
+	    UnSavedNews.push(FilteredUnSaved)  
+        console.log(UnSavedNews);             
         })
     })    
 }
@@ -155,4 +155,14 @@ selTags.addEventListener("change", function (e) {
     }
     }
 })
+/**
+ * Function to remove all cards before insert just saved cards
+ */
+function RemoveNews() {
+    UnSavedNews.forEach((New) => {  
+        const cardElement = document.querySelector(".card");
+        cardElement.remove();
+})
+}
+
 
