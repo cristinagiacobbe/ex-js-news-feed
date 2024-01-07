@@ -21,7 +21,7 @@ const News = [
         alt: "deep-sea"
     },
     {
-        id: 3,
+        id: "3",
         title: "Viaggio culinario: alla ricerca dei sapori perduti",
         content: "Esplorazione di tradizioni culinarie dimenticate e la ricerca di sapori autentici.",
         tags: "cucina",
@@ -31,7 +31,7 @@ const News = [
         alt: "kitchen-food",
     },
     {
-        id: 4,
+        id: "4",
         title: "Arte moderna: oltre i confini convenzionali",
         content: "Un'analisi delle tendenze e delle sfide nell'arte contemporanea, con interviste ad artisti emergenti.",
         tags: ["arte", "tech"],
@@ -40,7 +40,7 @@ const News = [
         image: "./images/modern-art.jpg",
         alt: "modern-art",
     }]
-
+let SavedNews = []
 
 //Extract each value of key "tags" and push them into a new array
 TagsArray = ["politic"]
@@ -86,40 +86,53 @@ function ConvertDate(DateToConvert) {
  * @param {Object} FilteredObj The filtered object to generate cards
  */
 function GenerateCard(FilteredObj) {
-    FilteredObj.forEach((New) => {   
-        const ContElement = document.querySelector(".card_container")
+    FilteredObj.forEach((New) => {  
+        const ContElement = document.querySelector(".card_container") 
         const cardElement = document.createElement("div")
         cardElement.classList.add("card", "mx-auto", "my-5")
-        //<div class="card mx-auto my-5" style="width: 45%;">
+        //<div class="card mx-auto my-5" style="width: 45%;">        
         const iBookMark = document.createElement("i")
         iBookMark.classList.add("fa-regular", "fa-bookmark")      
         ContElement.appendChild(cardElement)  
         cardElement.appendChild(iBookMark)  
         
-        console.log(iBookMark.classList);
+        //event listener on bookmark
+        iBookMark.addEventListener("click", function () {
+            iBookMark.classList.add("fa-solid")
+            cardElement.dataset.saved = (New.id)
+	    console.log(cardElement.dataset.saved)
+        const FilteredSaved = News.filter(New => New.id === cardElement.dataset.saved)
+	    SavedNews.push(FilteredSaved)  
+        console.log(SavedNews);             
+        })  
+        
+        
         const cardMarkup = `              
                 <div class="card-body">     
-                    <h4 class="card-title">${New.title}</h4>           
+                    <h4 class="card-title">${New.title}</h4> 
+                    <h5 class="card-title"> pubblicato da ${New.author}</h5>          
                     <h6>in data ${ConvertDate(New.published)}</h6>
+                    <p class="card-text">${New.content}</p>
                 <div>
-                    <img src=${New.image}>
+                    <img src=${New.image} ${New.alt}>
                 </div>
-	        <a href="#" class="btn btn-primary btn-${New.tags[0]}">${New.tags[0]}</a>
-	        <a href="#" class="btn btn-primary btn-${New.tags[1]}">${New.tags[1]}</a>
-        `
+                <a href="#" class="btn btn-primary btn-${typeof New.tags === "object" ? New.tags[0] : New.tags}">${typeof New.tags === "object" ? New.tags[0] : New.tags}</a>
+                <a href="#" class="btn btn-primary btn-${typeof New.tags === "object" ? New.tags[1] : "none" }">${typeof New.tags === "object" ? New.tags[1] : ""}</a>
+            `
         cardElement.insertAdjacentHTML("beforeend", cardMarkup)       
     })    
 }
+GenerateCard(News)
 
 selTags.addEventListener("change", function (e) {
     //console.log(e.target.value);
 
     //Before inizialize loop refresh cards
-    const cardElement = document.querySelector(".card_container");
-    cardElement.innerHTML = ""
+    const contElement = document.querySelector(".card_container");
+    contElement.innerHTML = ""
+    
 
-    //Consider first of all case of no-target.value found into News.tags ("politic")
-    //and case of "all tags"
+    //Consider case of "all tags"
     if (e.target.value === "all_tag") {
        GenerateCard(News);} 
     else {
@@ -130,6 +143,7 @@ selTags.addEventListener("change", function (e) {
             return New.tags === e.target.value;}
     })
     //console.log(FilteredTags);
+    //Consider case of no-target.value found into News.tags ("politic")
     if (FilteredTags.length === 0) {
         const cardElement = document.querySelector(".card_container")
         //cardElement.innerHTML = ""
@@ -142,3 +156,7 @@ selTags.addEventListener("change", function (e) {
     }
 })
 
+const CheckEl = document.querySelector(".form-check")
+CheckEl.addEventListener("change", function() {
+    GenerateCard(SavedNews)
+})

@@ -28,6 +28,7 @@ h1{
 .btn{
     color: white;
     border: 0;
+    margin-top: 5px;
 }
 .btn-geo{
     background-color: var(--green-geo);    
@@ -35,7 +36,7 @@ h1{
 .btn-tech{
     background-color: var(--blue-tech);    
 }
-.btn-kitchen{
+.btn-cucina{
     background-color: var(--purple-kitchen);    
 }
 .btn-viaggi{
@@ -43,6 +44,9 @@ h1{
 }
 .btn-arte{
     background-color: var(--yellow-arte);    
+}
+.btn-none{
+    background-color: white;    
 }
 h2{
     color: white;
