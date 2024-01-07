@@ -165,4 +165,8 @@ function RemoveNews() {
 })
 }
 
+const CheckEl = document.getElementById("check")
+        CheckEl.addEventListener("click", function() { 
+        RemoveNews()       
+        })
 
