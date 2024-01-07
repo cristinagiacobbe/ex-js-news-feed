@@ -56,9 +56,8 @@ News.forEach((New) => {
         //case of: "cucina"
         TagsArray.push(New.tags);
     }
-}
+})
 
-)
 //console.log(TagsArray);
 //create a set of tags (without duplicate)
 const Set_tags = new Set(TagsArray)
@@ -94,18 +93,7 @@ function GenerateCard(FilteredObj) {
         const iBookMark = document.createElement("i")
         iBookMark.classList.add("fa-regular", "fa-bookmark")      
         ContElement.appendChild(cardElement)  
-        cardElement.appendChild(iBookMark)  
-        
-        //event listener on bookmark
-        iBookMark.addEventListener("click", function () {
-            iBookMark.classList.add("fa-solid")
-            cardElement.dataset.saved = (New.id)
-	    console.log(cardElement.dataset.saved)
-        const FilteredSaved = News.filter(New => New.id === cardElement.dataset.saved)
-	    SavedNews.push(FilteredSaved)  
-        console.log(SavedNews);             
-        })  
-        
+        cardElement.appendChild(iBookMark)        
         
         const cardMarkup = `              
                 <div class="card-body">     
@@ -119,7 +107,19 @@ function GenerateCard(FilteredObj) {
                 <a href="#" class="btn btn-primary btn-${typeof New.tags === "object" ? New.tags[0] : New.tags}">${typeof New.tags === "object" ? New.tags[0] : New.tags}</a>
                 <a href="#" class="btn btn-primary btn-${typeof New.tags === "object" ? New.tags[1] : "none" }">${typeof New.tags === "object" ? New.tags[1] : ""}</a>
             `
-        cardElement.insertAdjacentHTML("beforeend", cardMarkup)       
+        cardElement.insertAdjacentHTML("beforeend", cardMarkup)     
+        
+        //event listener on bookmark
+        iBookMark.addEventListener("click", function () {
+            iBookMark.classList.add("fa-solid")
+            cardElement.dataset.saved = (New.id)
+        //Create a data-attribute which correspond to the "id"News just for bookmark clicked
+	    console.log(cardElement.dataset.saved)
+        //Filter the "clicked-bookmark cards" and insert them to the empty array I have created (script.js.43)
+        const FilteredSaved = News.filter(New => New.id === cardElement.dataset.saved)
+	    SavedNews.push(FilteredSaved)  
+        console.log(SavedNews);             
+        })
     })    
 }
 GenerateCard(News)
@@ -156,7 +156,3 @@ selTags.addEventListener("change", function (e) {
     }
 })
 
-const CheckEl = document.querySelector(".form-check")
-CheckEl.addEventListener("change", function() {
-    GenerateCard(SavedNews)
-})
