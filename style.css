@@ -51,6 +51,8 @@ h1{
 h2{
     color: white;
     background-color: var(--body-bg);
+    text-align: center;
+    margin-top: 30px;;
 }
 .card{
     border: 0;

@@ -40,10 +40,10 @@ const News = [
         image: "./images/modern-art.jpg",
         alt: "modern-art",
     }]
-let UnSavedNews = []
+let SavedNews = []
 
 //Extract each value of key "tags" and push them into a new array
-TagsArray = ["politic"]
+let TagsArray = ["politic"]
 News.forEach((New) => {
 
     if (typeof New.tags === "object") {
@@ -80,58 +80,55 @@ function ConvertDate(DateToConvert) {
     return (`${formatDate.getDate()}-${(formatDate.getMonth()+1) < 10 ? ("0"+(formatDate.getMonth()+1)) : (formatDate.getMonth()+1)}-${formatDate.getFullYear()}`);
     }
 
+const contElement = document.querySelector(".card_container")
+GenerateCard(News)
+
 /**
- * The function create cards with filtered objects
- * @param {Object} FilteredObj The filtered object to generate cards
+ * function for the card markup 
+ * @param {object} News is the list of News
  */
-function GenerateCard(FilteredObj) {
-    FilteredObj.forEach((New) => {  
-        const ContElement = document.querySelector(".card_container") 
-        const cardElement = document.createElement("div")
-        cardElement.classList.add("card", "mx-auto", "my-5")
-        //<div class="card mx-auto my-5" style="width: 45%;">        
-        const iBookMark = document.createElement("i")
-        iBookMark.classList.add("fa-regular", "fa-bookmark")      
-        ContElement.appendChild(cardElement)  
-        cardElement.appendChild(iBookMark)        
-        
-        const cardMarkup = `              
-                <div class="card-body">     
-                    <h4 class="card-title">${New.title}</h4> 
-                    <h5 class="card-title"> pubblicato da ${New.author}</h5>          
-                    <h6>in data ${ConvertDate(New.published)}</h6>
-                    <p class="card-text">${New.content}</p>
+function GenerateCard(News) {
+    News.forEach((New) => {
+        const cardMarkup = `      
+        <div class="card mx-auto my-5" style="width: 45%;">
+            <i class="fa-regular fa-bookmark" data-saved="${New.id}"></i>       
+            <div class="card-body">     
+                <h4 class="card-title">${New.title}</h4> 
+                <h5 class="card-title"> pubblicato da ${New.author}</h5>          
+                <h6>in data ${ConvertDate(New.published)}</h6>
+                <p class="card-text">${New.content}</p>
                 <div>
                     <img src=${New.image} ${New.alt}>
                 </div>
                 <a href="#" class="btn btn-primary btn-${typeof New.tags === "object" ? New.tags[0] : New.tags}">${typeof New.tags === "object" ? New.tags[0] : New.tags}</a>
                 <a href="#" class="btn btn-primary btn-${typeof New.tags === "object" ? New.tags[1] : "none" }">${typeof New.tags === "object" ? New.tags[1] : ""}</a>
-            `
-        cardElement.insertAdjacentHTML("beforeend", cardMarkup)     
-        
-        //event listener on bookmark
-        iBookMark.addEventListener("click", function () {
-            iBookMark.classList.add("fa-solid")
-            cardElement.dataset.saved = (New.id)
-        //Create a data-attribute which correspond to the "id"News just for bookmark clicked
-	    console.log(cardElement.dataset.saved)
-        //Filter the "clicked-bookmark cards" and insert them to the empty array I have created (script.js.43)
-        const FilteredUnSaved = News.filter(New => New.id !== cardElement.dataset.saved)
-	    UnSavedNews.push(FilteredUnSaved)  
-        console.log(UnSavedNews);             
-        })
-    })    
+            </div>`
+        contElement.insertAdjacentHTML("beforeend", cardMarkup)        
+    })
 }
-GenerateCard(News)
 
+/**
+ * function to create an alert message on page in case of no available news
+ * @param {object} listNews is the list of News (filtered for tags or for checked)
+ */
+function Unavailable(listNews) {
+    if (listNews.length === 0) {
+        const AlertElement = document.createElement("h2")
+        AlertElement.innerHTML = ("No news available.")
+        contElement.appendChild(AlertElement);
+       } else {
+        GenerateCard(listNews)}
+}
+
+/**
+ * First event listener to filter for tags when change select-form
+ */
 selTags.addEventListener("change", function (e) {
     //console.log(e.target.value);
 
     //Before inizialize loop refresh cards
-    const contElement = document.querySelector(".card_container");
     contElement.innerHTML = ""
     
-
     //Consider case of "all tags"
     if (e.target.value === "all_tag") {
        GenerateCard(News);} 
@@ -144,29 +141,37 @@ selTags.addEventListener("change", function (e) {
     })
     //console.log(FilteredTags);
     //Consider case of no-target.value found into News.tags ("politic")
-    if (FilteredTags.length === 0) {
-        const cardElement = document.querySelector(".card_container")
-        //cardElement.innerHTML = ""
-        const AlertElement = document.createElement("h2")
-        AlertElement.innerHTML = ("No news available.")
-        cardElement.appendChild(AlertElement)
-    } else {
-    GenerateCard(FilteredTags);
-    }
+    Unavailable(FilteredTags)
     }
 })
+
 /**
- * Function to remove all cards before insert just saved cards
+ * Second event listener to change icon bookmark when click on it (to save it)
  */
-function RemoveNews() {
-    UnSavedNews.forEach((New) => {  
-        const cardElement = document.querySelector(".card");
-        cardElement.remove();
+const iBookMarks = document.querySelectorAll(".card_container > .card > i")
+console.log(iBookMarks);
+
+iBookMarks.forEach(iBookMark => {
+    iBookMark.addEventListener("click", function (e) {     
+    iBookMark.classList.add("fa-solid")      
+    //console.log(e.target.getAttribute("data-saved")); 
+    const SavedId = e.target.getAttribute("data-saved")
+    SavedNews.push(SavedId)    
+    //console.log(SavedNews); 
+    }) 
+})     
+
+/**
+ * Third event listener to filter the checked news when click on check-form
+ */
+const checkEl = document.getElementById("check")
+checkEl.addEventListener("change", function(e) {      
+    const CheckNews = News.filter((New) => {
+        if (SavedNews.includes(New.id)) {
+            return true;}                  
+        })        
+   //console.log(CheckNews);     
+   contElement.innerHTML = ""
+   Unavailable(CheckNews)
+   
 })
-}
-
-const CheckEl = document.getElementById("check")
-        CheckEl.addEventListener("click", function() { 
-        RemoveNews()       
-        })
-
