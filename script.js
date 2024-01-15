@@ -82,6 +82,14 @@ function ConvertDate(DateToConvert) {
 
 const contElement = document.querySelector(".card_container")
 GenerateCard(News)
+SelectByCheck(News)
+
+if (FilterByCheck(News).length > 0) {
+    SelectByTags(FilterByCheck(News));}
+else {
+    SelectByTags(News)}    
+
+
 
 /**
  * function for the card markup 
@@ -105,6 +113,7 @@ function GenerateCard(News) {
             </div>`
         contElement.insertAdjacentHTML("beforeend", cardMarkup)        
     })
+    SaveBookmarks()
 }
 
 /**
@@ -121,8 +130,10 @@ function Unavailable(listNews) {
 }
 
 /**
- * First event listener to filter for tags when change select-form
+ * Function wich filter News by tags
+ * @param {object} News List of news to filter by tags
  */
+function SelectByTags(News) {
 selTags.addEventListener("change", function (e) {
     //console.log(e.target.value);
 
@@ -144,10 +155,12 @@ selTags.addEventListener("change", function (e) {
     Unavailable(FilteredTags)
     }
 })
+}
 
 /**
- * Second event listener to change icon bookmark when click on it (to save it)
+ * anonym function to change class icon bookmark (regular=>solid) and save card on click
  */
+function SaveBookmarks() {
 const iBookMarks = document.querySelectorAll(".card_container > .card > i")
 console.log(iBookMarks);
 
@@ -160,18 +173,27 @@ iBookMarks.forEach(iBookMark => {
     //console.log(SavedNews); 
     }) 
 })     
+}
 
 /**
- * Third event listener to filter the checked news when click on check-form
+ * 
+ * @param {object} ArrNews list of News to filter
+ * @returns filtered array which contains only checked News
  */
+function FilterByCheck(ArrNews) {
+    return ArrNews.filter((New) => SavedNews.includes(New.id));
+}
+
+
+/**
+ * function to generate cards filtered by check when click on check-form
+ * @param {object} News list of news to filter by check
+ */
+function SelectByCheck(News) {
 const checkEl = document.getElementById("check")
 checkEl.addEventListener("change", function(e) {      
-    const CheckNews = News.filter((New) => {
-        if (SavedNews.includes(New.id)) {
-            return true;}                  
-        })        
-   //console.log(CheckNews);     
-   contElement.innerHTML = ""
-   Unavailable(CheckNews)
-   
+    FilterByCheck(News)       
+   contElement.innerHTML = ""   
+   Unavailable(FilterByCheck(News))   
 })
+}
