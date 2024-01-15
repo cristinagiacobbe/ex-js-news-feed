@@ -83,12 +83,7 @@ function ConvertDate(DateToConvert) {
 const contElement = document.querySelector(".card_container")
 GenerateCard(News)
 SelectByCheck(News)
-
-if (FilterByCheck(News).length > 0) {
-    SelectByTags(FilterByCheck(News));}
-else {
-    SelectByTags(News)}    
-
+SelectByTags()
 
 
 /**
@@ -133,10 +128,12 @@ function Unavailable(listNews) {
  * Function wich filter News by tags
  * @param {object} News List of news to filter by tags
  */
-function SelectByTags(News) {
+function SelectByTags() {
 selTags.addEventListener("change", function (e) {
     //console.log(e.target.value);
-
+    FilterByCheck(News)
+    console.log(FilterByCheck(News));
+    const ArrCheck = FilterByCheck(News)
     //Before inizialize loop refresh cards
     contElement.innerHTML = ""
     
@@ -144,7 +141,7 @@ selTags.addEventListener("change", function (e) {
     if (e.target.value === "all_tag") {
        GenerateCard(News);} 
     else {
-    const FilteredTags = News.filter(New => {
+    const FilteredTags = ArrCheck.filter(New => {
         if (typeof New.tags === "object") {
             return (New.tags.find(TagEl => TagEl === e.target.value));}
         else {
@@ -162,7 +159,7 @@ selTags.addEventListener("change", function (e) {
  */
 function SaveBookmarks() {
 const iBookMarks = document.querySelectorAll(".card_container > .card > i")
-console.log(iBookMarks);
+//console.log(iBookMarks);
 
 iBookMarks.forEach(iBookMark => {
     iBookMark.addEventListener("click", function (e) {     
@@ -170,7 +167,7 @@ iBookMarks.forEach(iBookMark => {
     //console.log(e.target.getAttribute("data-saved")); 
     const SavedId = e.target.getAttribute("data-saved")
     SavedNews.push(SavedId)    
-    //console.log(SavedNews); 
+    //console.log(SavedNews);     
     }) 
 })     
 }
@@ -192,7 +189,8 @@ function FilterByCheck(ArrNews) {
 function SelectByCheck(News) {
 const checkEl = document.getElementById("check")
 checkEl.addEventListener("change", function(e) {      
-    FilterByCheck(News)       
+    FilterByCheck(News)   
+    console.log(FilterByCheck(News));    
    contElement.innerHTML = ""   
    Unavailable(FilterByCheck(News))   
 })
