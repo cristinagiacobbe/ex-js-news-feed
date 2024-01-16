@@ -81,6 +81,7 @@ function ConvertDate(DateToConvert) {
     }
 
 const contElement = document.querySelector(".card_container")
+const checkEl = document.getElementById("check")
 GenerateCard(News)
 SelectByCheck(News)
 SelectByTags()
@@ -131,17 +132,15 @@ function Unavailable(listNews) {
 function SelectByTags() {
 selTags.addEventListener("change", function (e) {
     //console.log(e.target.value);
-    FilterByCheck(News)
-    console.log(FilterByCheck(News));
-    const ArrCheck = FilterByCheck(News)
+    
     //Before inizialize loop refresh cards
     contElement.innerHTML = ""
     
     //Consider case of "all tags"
     if (e.target.value === "all_tag") {
-       GenerateCard(News);} 
+       GenerateCard(IsChecked());} 
     else {
-    const FilteredTags = ArrCheck.filter(New => {
+    const FilteredTags = IsChecked().filter(New => {
         if (typeof New.tags === "object") {
             return (New.tags.find(TagEl => TagEl === e.target.value));}
         else {
@@ -174,13 +173,28 @@ iBookMarks.forEach(iBookMark => {
 
 /**
  * 
- * @param {object} ArrNews list of News to filter
- * @returns filtered array which contains only checked News
+ * @param {object} Anonym function (is applied only on News list)
+ * @returns filtered array which contains only checked News (only if check-form is checked !!)
  */
-function FilterByCheck(ArrNews) {
-    return ArrNews.filter((New) => SavedNews.includes(New.id));
+function FilterByCheck() {    
+    if (checkEl.checked === true) {
+        return News.filter((New) => SavedNews.includes(New.id))
+    } else {
+        return ""
+    }
 }
 
+/**
+ * 
+ * @param {object} Anonym function
+ * @returns filtered to generate the list of News (original list or checked list) on which apply filter by tags (in select-form)
+ */
+function IsChecked() { 
+    //console.log(FilterByCheck());   
+	if (FilterByCheck() == ""){
+	return News;} else {
+	return News.filter((New) => SavedNews.includes(New.id));}
+}
 
 /**
  * function to generate cards filtered by check when click on check-form
