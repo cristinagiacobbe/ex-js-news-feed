@@ -200,12 +200,16 @@ function IsChecked() {
  * function to generate cards filtered by check when click on check-form
  * @param {object} News list of news to filter by check
  */
-function SelectByCheck(News) {
-const checkEl = document.getElementById("check")
-checkEl.addEventListener("change", function(e) {      
-    FilterByCheck(News)   
-    console.log(FilterByCheck(News));    
-   contElement.innerHTML = ""   
-   Unavailable(FilterByCheck(News))   
-})
-}
+function SelectByCheck() {
+    //const checkEl = document.getElementById("check")
+    checkEl.addEventListener("change", function(e) {      
+    if (e.target.checked === true) {
+        FilterByCheck();   
+        IsChecked();
+    //console.log(IsChecked());    
+       contElement.innerHTML = ""   
+       Unavailable(FilterByCheck())} else {
+        contElement.innerHTML = ""
+        GenerateCard(News);}   //consider case of "un-check" check-form: refresh page
+    })
+    }
