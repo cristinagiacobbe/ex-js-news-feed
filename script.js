@@ -70,14 +70,18 @@ set_tags.forEach((set_tag) => {
     tags.append(newOption);
 })
 
-/**
- * function to convert in format Date DD-MM-YYYY
- * @param {Date} DateToConvert is the original date I need to convert
- * @returns the new converted date
- */
-function ConvertDate(DateToConvert) {
+/* function ConvertDate(DateToConvert) {
     const formatDate = new Date(DateToConvert)
     return (`${formatDate.getDate()}-${(formatDate.getMonth() + 1) < 10 ? ("0" + (formatDate.getMonth() + 1)) : (formatDate.getMonth() + 1)}-${formatDate.getFullYear()}`);
+} */
+
+/**
+ * 
+ * @param {string} dateToConvert string-date in american format
+ * @returns string-date in italian format
+ */
+function ConvertDate(dateToConvert) {
+    return dateToConvert.split("-").reverse().join("-")
 }
 
 const contElement = document.querySelector(".card_container")
@@ -221,3 +225,9 @@ function SelectByCheck() {
         }   //consider case of "un-check" check-form: refresh page
     })
 }
+
+
+
+
+
+
