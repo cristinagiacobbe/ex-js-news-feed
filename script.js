@@ -40,33 +40,33 @@ const News = [
         image: "./images/modern-art.jpg",
         alt: "modern-art",
     }]
-let SavedNews = []
+let savedNews = []
 
 //Extract each value of key "tags" and push them into a new array
-let TagsArray = ["politic"]
+let tagsArray = ["politic"]
 News.forEach((New) => {
 
     if (typeof New.tags === "object") {
         //case of: ["arte", "tech"]
         for (let i = 0; i < New.tags.length; i++) {
-            TagsArray.push(New.tags[i])
+            tagsArray.push(New.tags[i])
         }
     }
     else {
         //case of: "cucina"
-        TagsArray.push(New.tags);
+        tagsArray.push(New.tags);
     }
 })
 
 //console.log(TagsArray);
 //create a set of tags (without duplicate)
-const Set_tags = new Set(TagsArray)
+const set_tags = new Set(tagsArray)
 //console.log(Set_tags);
 
 /* create select form with a dinamic logic*/
 const selTags = document.getElementById("tags")
-Set_tags.forEach((Set_tag) => {
-    let newOption = new Option(Set_tag, Set_tag);
+set_tags.forEach((set_tag) => {
+    let newOption = new Option(set_tag, set_tag);
     tags.append(newOption);
 })
 
@@ -77,8 +77,8 @@ Set_tags.forEach((Set_tag) => {
  */
 function ConvertDate(DateToConvert) {
     const formatDate = new Date(DateToConvert)
-    return (`${formatDate.getDate()}-${(formatDate.getMonth()+1) < 10 ? ("0"+(formatDate.getMonth()+1)) : (formatDate.getMonth()+1)}-${formatDate.getFullYear()}`);
-    }
+    return (`${formatDate.getDate()}-${(formatDate.getMonth() + 1) < 10 ? ("0" + (formatDate.getMonth() + 1)) : (formatDate.getMonth() + 1)}-${formatDate.getFullYear()}`);
+}
 
 const contElement = document.querySelector(".card_container")
 const checkEl = document.getElementById("check")
@@ -105,9 +105,9 @@ function GenerateCard(News) {
                     <img src=${New.image} ${New.alt}>
                 </div>
                 <a href="#" class="btn btn-primary btn-${typeof New.tags === "object" ? New.tags[0] : New.tags}">${typeof New.tags === "object" ? New.tags[0] : New.tags}</a>
-                <a href="#" class="btn btn-primary btn-${typeof New.tags === "object" ? New.tags[1] : "none" }">${typeof New.tags === "object" ? New.tags[1] : ""}</a>
+                <a href="#" class="btn btn-primary btn-${typeof New.tags === "object" ? New.tags[1] : "none"}">${typeof New.tags === "object" ? New.tags[1] : ""}</a>
             </div>`
-        contElement.insertAdjacentHTML("beforeend", cardMarkup)        
+        contElement.insertAdjacentHTML("beforeend", cardMarkup)
     })
     SaveBookmarks()
 }
@@ -118,11 +118,12 @@ function GenerateCard(News) {
  */
 function Unavailable(listNews) {
     if (listNews.length === 0) {
-        const AlertElement = document.createElement("h2")
-        AlertElement.innerHTML = ("No news available.")
+        const alertElement = document.createElement("h2")
+        alertElement.innerHTML = ("No news available.")
         contElement.appendChild(AlertElement);
-       } else {
-        GenerateCard(listNews)}
+    } else {
+        GenerateCard(listNews)
+    }
 }
 
 /**
@@ -130,45 +131,48 @@ function Unavailable(listNews) {
  * @param {object} News List of news to filter by tags
  */
 function SelectByTags() {
-selTags.addEventListener("change", function (e) {
-    //console.log(e.target.value);
-    
-    //Before inizialize loop refresh cards
-    contElement.innerHTML = ""
-    
-    //Consider case of "all tags"
-    if (e.target.value === "all_tag") {
-       GenerateCard(IsChecked());} 
-    else {
-    const FilteredTags = IsChecked().filter(New => {
-        if (typeof New.tags === "object") {
-            return (New.tags.find(TagEl => TagEl === e.target.value));}
+    selTags.addEventListener("change", function (e) {
+        //console.log(e.target.value);
+
+        //Before inizialize loop refresh cards
+        contElement.innerHTML = ""
+
+        //Consider case of "all tags"
+        if (e.target.value === "all_tag") {
+            GenerateCard(IsChecked());
+        }
         else {
-            return New.tags === e.target.value;}
+            const filteredTags = IsChecked().filter(New => {
+                if (typeof New.tags === "object") {
+                    return (New.tags.find(TagEl => TagEl === e.target.value));
+                }
+                else {
+                    return New.tags === e.target.value;
+                }
+            })
+            //console.log(FilteredTags);
+            //Consider case of no-target.value found into News.tags ("politic")
+            Unavailable(filteredTags)
+        }
     })
-    //console.log(FilteredTags);
-    //Consider case of no-target.value found into News.tags ("politic")
-    Unavailable(FilteredTags)
-    }
-})
 }
 
 /**
  * anonym function to change class icon bookmark (regular=>solid) and save card on click
  */
 function SaveBookmarks() {
-const iBookMarks = document.querySelectorAll(".card_container > .card > i")
-//console.log(iBookMarks);
+    const iBookMarks = document.querySelectorAll(".card_container > .card > i")
+    //console.log(iBookMarks);
 
-iBookMarks.forEach(iBookMark => {
-    iBookMark.addEventListener("click", function (e) {     
-    iBookMark.classList.add("fa-solid")      
-    //console.log(e.target.getAttribute("data-saved")); 
-    const SavedId = e.target.getAttribute("data-saved")
-    SavedNews.push(SavedId)    
-    //console.log(SavedNews);     
-    }) 
-})     
+    iBookMarks.forEach(iBookMark => {
+        iBookMark.addEventListener("click", function (e) {
+            iBookMark.classList.add("fa-solid")
+            //console.log(e.target.getAttribute("data-saved")); 
+            const savedId = e.target.getAttribute("data-saved")
+            savedNews.push(savedId)
+            //console.log(savedNews);     
+        })
+    })
 }
 
 /**
@@ -176,9 +180,9 @@ iBookMarks.forEach(iBookMark => {
  * @param {object} Anonym function (is applied only on News list)
  * @returns filtered array which contains only checked News (only if check-form is checked !!)
  */
-function FilterByCheck() {    
+function FilterByCheck() {
     if (checkEl.checked === true) {
-        return News.filter((New) => SavedNews.includes(New.id))
+        return News.filter((New) => savedNews.includes(New.id))
     } else {
         return ""
     }
@@ -189,11 +193,13 @@ function FilterByCheck() {
  * @param {object} Anonym function
  * @returns filtered to generate the list of News (original list or checked list) on which apply filter by tags (in select-form)
  */
-function IsChecked() { 
+function IsChecked() {
     //console.log(FilterByCheck());   
-	if (FilterByCheck() == ""){
-	return News;} else {
-	return News.filter((New) => SavedNews.includes(New.id));}
+    if (FilterByCheck() == "") {
+        return News;
+    } else {
+        return News.filter((New) => savedNews.includes(New.id));
+    }
 }
 
 /**
@@ -202,14 +208,16 @@ function IsChecked() {
  */
 function SelectByCheck() {
     //const checkEl = document.getElementById("check")
-    checkEl.addEventListener("change", function(e) {      
-    if (e.target.checked === true) {
-        FilterByCheck();   
-        IsChecked();
-    //console.log(IsChecked());    
-       contElement.innerHTML = ""   
-       Unavailable(FilterByCheck())} else {
-        contElement.innerHTML = ""
-        GenerateCard(News);}   //consider case of "un-check" check-form: refresh page
+    checkEl.addEventListener("change", function (e) {
+        if (e.target.checked === true) {
+            FilterByCheck();
+            IsChecked();
+            //console.log(IsChecked());    
+            contElement.innerHTML = ""
+            Unavailable(FilterByCheck())
+        } else {
+            contElement.innerHTML = ""
+            GenerateCard(News);
+        }   //consider case of "un-check" check-form: refresh page
     })
-    }
+}
