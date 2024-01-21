@@ -87,8 +87,8 @@ function ConvertDate(dateToConvert) {
 const contElement = document.querySelector(".card_container")
 const checkEl = document.getElementById("check")
 GenerateCard(News)
-SelectByCheck(News)
-SelectByTags()
+SelectByCheck(checkEl)
+SelectByTags(selTags)
 
 
 /**
@@ -124,18 +124,19 @@ function Unavailable(listNews) {
     if (listNews.length === 0) {
         const alertElement = document.createElement("h2")
         alertElement.innerHTML = ("No news available.")
-        contElement.appendChild(AlertElement);
+        contElement.appendChild(alertElement);
     } else {
         GenerateCard(listNews)
     }
 }
 
+
 /**
  * Function wich filter News by tags
- * @param {object} News List of news to filter by tags
+ * @param {object} listTags different tags (the element filter)
  */
-function SelectByTags() {
-    selTags.addEventListener("change", function (e) {
+function SelectByTags(listTags) {
+    listTags.addEventListener("change", function (e) {
         //console.log(e.target.value);
 
         //Before inizialize loop refresh cards
@@ -143,10 +144,10 @@ function SelectByTags() {
 
         //Consider case of "all tags"
         if (e.target.value === "all_tag") {
-            GenerateCard(IsChecked());
+            GenerateCard(IsChecked(News));
         }
         else {
-            const filteredTags = IsChecked().filter(New => {
+            const filteredTags = IsChecked(News).filter(New => {
                 if (typeof New.tags === "object") {
                     return (New.tags.find(TagEl => TagEl === e.target.value));
                 }
@@ -184,9 +185,9 @@ function SaveBookmarks() {
  * @param {object} Anonym function (is applied only on News list)
  * @returns filtered array which contains only checked News (only if check-form is checked !!)
  */
-function FilterByCheck() {
+function FilterByCheck(listNews) {
     if (checkEl.checked === true) {
-        return News.filter((New) => savedNews.includes(New.id))
+        return listNews.filter((New) => savedNews.includes(New.id))
     } else {
         return ""
     }
@@ -197,12 +198,12 @@ function FilterByCheck() {
  * @param {object} Anonym function
  * @returns filtered to generate the list of News (original list or checked list) on which apply filter by tags (in select-form)
  */
-function IsChecked() {
-    //console.log(FilterByCheck());   
-    if (FilterByCheck() == "") {
-        return News;
+function IsChecked(listNews) {
+    //console.log(FilterByCheck(News));   
+    if (FilterByCheck(News) == "") {
+        return listNews;
     } else {
-        return News.filter((New) => savedNews.includes(New.id));
+        return listNews.filter((New) => savedNews.includes(New.id));
     }
 }
 
@@ -210,15 +211,15 @@ function IsChecked() {
  * function to generate cards filtered by check when click on check-form
  * @param {object} News list of news to filter by check
  */
-function SelectByCheck() {
+function SelectByCheck(DomEl) {
     //const checkEl = document.getElementById("check")
-    checkEl.addEventListener("change", function (e) {
+    DomEl.addEventListener("change", function (e) {
         if (e.target.checked === true) {
-            FilterByCheck();
-            IsChecked();
-            //console.log(IsChecked());    
+            FilterByCheck(News);
+            IsChecked(News);
+            //console.log(IsChecked(News));    
             contElement.innerHTML = ""
-            Unavailable(FilterByCheck())
+            Unavailable(FilterByCheck(News))
         } else {
             contElement.innerHTML = ""
             GenerateCard(News);
