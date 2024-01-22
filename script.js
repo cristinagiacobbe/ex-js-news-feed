@@ -67,6 +67,7 @@ const set_tags = new Set(tagsArray)
 const selTags = document.getElementById("tags")
 set_tags.forEach((set_tag) => {
     let newOption = new Option(set_tag, set_tag);
+    newOption.classList.add(`btn-${set_tag}`)
     tags.append(newOption);
 })
 
@@ -83,6 +84,20 @@ set_tags.forEach((set_tag) => {
 function ConvertDate(dateToConvert) {
     return dateToConvert.split("-").reverse().join("-")
 }
+
+//NON FUNZIONA ANCORA: SERVE A RENDERE DINAMICO L'INSERIMENTO DEL TAG <A REF></A>
+/* function TemplateTags(param) {
+    if (typeof param === "object") {
+        for (let i = 0; i < param.length; i++) {
+            let TagMarkup = `
+        <a href="#" class="btn btn-primary btn-${param[i]}">${param[i]}</a>`
+        }
+    } else {
+        let TagMarkup = `
+        <a href="#" class="btn btn-primary btn-${param}">${param}</a>`
+    }
+} */
+
 
 const contElement = document.querySelector(".card_container")
 const checkEl = document.getElementById("check")
@@ -110,7 +125,7 @@ function GenerateCard(News) {
                 </div>
                 <a href="#" class="btn btn-primary btn-${typeof New.tags === "object" ? New.tags[0] : New.tags}">${typeof New.tags === "object" ? New.tags[0] : New.tags}</a>
                 <a href="#" class="btn btn-primary btn-${typeof New.tags === "object" ? New.tags[1] : "none"}">${typeof New.tags === "object" ? New.tags[1] : ""}</a>
-            </div>`
+                </div>`
         contElement.insertAdjacentHTML("beforeend", cardMarkup)
     })
     SaveBookmarks()
@@ -171,18 +186,28 @@ function SaveBookmarks() {
 
     iBookMarks.forEach(iBookMark => {
         iBookMark.addEventListener("click", function (e) {
-            iBookMark.classList.add("fa-solid")
-            //console.log(e.target.getAttribute("data-saved")); 
             const savedId = e.target.getAttribute("data-saved")
-            savedNews.push(savedId)
-            //console.log(savedNews);     
+            //aggiungo la possibilità di "disattivare il salvataggio del bookmark aggiornando anche l'array degli elementi salvati"
+            if (iBookMark.classList[iBookMark.classList.length - 1] === "fa-solid") {
+                iBookMark.classList.remove("fa-solid")
+                console.log(iBookMark.classList)
+                savedNews.pop(savedId)
+                console.log(savedNews)
+            } else {
+                iBookMark.classList.add("fa-solid")
+                console.log(iBookMark.classList)
+                savedNews.push(savedId)
+                console.log(savedNews)
+            }
+
+            //console.log(e.target.getAttribute("data-saved")); 
         })
     })
 }
 
 /**
  * 
- * @param {object} Anonym function (is applied only on News list)
+ * @param {object} listNews list of News to filter
  * @returns filtered array which contains only checked News (only if check-form is checked !!)
  */
 function FilterByCheck(listNews) {
@@ -195,7 +220,7 @@ function FilterByCheck(listNews) {
 
 /**
  * 
- * @param {object} Anonym function
+ * @param {object} listNews list of News to filter
  * @returns filtered to generate the list of News (original list or checked list) on which apply filter by tags (in select-form)
  */
 function IsChecked(listNews) {
@@ -209,7 +234,7 @@ function IsChecked(listNews) {
 
 /**
  * function to generate cards filtered by check when click on check-form
- * @param {object} News list of news to filter by check
+ * @param {object} DomEl tag element which trigger the event
  */
 function SelectByCheck(DomEl) {
     //const checkEl = document.getElementById("check")
