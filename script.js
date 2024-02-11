@@ -24,7 +24,7 @@ const News = [
         id: "3",
         title: "Viaggio culinario: alla ricerca dei sapori perduti",
         content: "Esplorazione di tradizioni culinarie dimenticate e la ricerca di sapori autentici.",
-        tags: "cucina",
+        tags: ["cucina"],
         author: "Marta Bianchi",
         published: "2023-04-20",
         image: "./images/kitchen-food.jpg",
@@ -46,16 +46,12 @@ let savedNews = []
 let tagsArray = ["politic"]
 News.forEach((New) => {
 
-    if (typeof New.tags === "object") {
-        //case of: ["arte", "tech"]
-        for (let i = 0; i < New.tags.length; i++) {
-            tagsArray.push(New.tags[i])
-        }
+
+    //case of: ["arte", "tech"]
+    for (let i = 0; i < New.tags.length; i++) {
+        tagsArray.push(New.tags[i])
     }
-    else {
-        //case of: "cucina"
-        tagsArray.push(New.tags);
-    }
+
 })
 
 //console.log(TagsArray);
@@ -85,20 +81,6 @@ function ConvertDate(dateToConvert) {
     return dateToConvert.split("-").reverse().join("-")
 }
 
-//NON FUNZIONA ANCORA: SERVE A RENDERE DINAMICO L'INSERIMENTO DEL TAG <A REF></A>
-/* function TemplateTags(param) {
-    if (typeof param === "object") {
-        for (let i = 0; i < param.length; i++) {
-            let TagMarkup = `
-        <a href="#" class="btn btn-primary btn-${param[i]}">${param[i]}</a>`
-        }
-    } else {
-        let TagMarkup = `
-        <a href="#" class="btn btn-primary btn-${param}">${param}</a>`
-    }
-} */
-
-
 const contElement = document.querySelector(".card_container")
 const checkEl = document.getElementById("check")
 GenerateCard(News)
@@ -112,6 +94,13 @@ SelectByTags(selTags)
  */
 function GenerateCard(News) {
     News.forEach((New) => {
+        let NewsListTags = ""
+
+        New.tags.forEach((tag) => {
+            NewsListTags +=
+                ` <a href="#" class="btn btn-primary btn-${tag} ">${tag}</a>`
+        })
+
         const cardMarkup = `      
         <div class="card mx-auto my-5" style="width: 45%;">
             <i class="fa-regular fa-bookmark" data-saved="${New.id}"></i>       
@@ -123,8 +112,7 @@ function GenerateCard(News) {
                 <div>
                     <img src=${New.image} ${New.alt}>
                 </div>
-                <a href="#" class="btn btn-primary btn-${typeof New.tags === "object" ? New.tags[0] : New.tags}">${typeof New.tags === "object" ? New.tags[0] : New.tags}</a>
-                <a href="#" class="btn btn-primary btn-${typeof New.tags === "object" ? New.tags[1] : "none"}">${typeof New.tags === "object" ? New.tags[1] : ""}</a>
+                ${NewsListTags}
                 </div>`
         contElement.insertAdjacentHTML("beforeend", cardMarkup)
     })
@@ -190,12 +178,12 @@ function SaveBookmarks() {
             //aggiungo la possibilità di "disattivare il salvataggio del bookmark aggiornando anche l'array degli elementi salvati"
             if (iBookMark.classList[iBookMark.classList.length - 1] === "fa-solid") {
                 iBookMark.classList.remove("fa-solid")
-                console.log(iBookMark.classList)
-                savedNews.pop(savedId)
-                console.log(savedNews)
+                const idToRemove = savedNews.indexOf(savedId)
+                savedNews.splice(idToRemove, 1)
+                //console.log(savedNews)
             } else {
                 iBookMark.classList.add("fa-solid")
-                console.log(iBookMark.classList)
+                //console.log(iBookMark.classList)
                 savedNews.push(savedId)
                 console.log(savedNews)
             }
@@ -242,6 +230,8 @@ function SelectByCheck(DomEl) {
         if (e.target.checked === true) {
             FilterByCheck(News);
             IsChecked(News);
+            console.log(iBookMarks);
+
             //console.log(IsChecked(News));    
             contElement.innerHTML = ""
             Unavailable(FilterByCheck(News))
