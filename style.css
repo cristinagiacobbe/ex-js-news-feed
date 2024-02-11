@@ -1,8 +1,9 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 /* #region utilities */
 :root {
     --body-bg: #023047;
@@ -12,57 +13,82 @@
     --salmon-viaggi: #f3a360;
     --yellow-arte: #ffd601;
 }
-/* #endregion utilities */ 
-h1{
+
+/* #endregion utilities */
+h1 {
     margin-top: 20px;
     color: white;
     text-align: center;
 }
-.container{
-    display:flex;
-    justify-content:space-between;
+
+.container {
+    display: flex;
+    justify-content: space-between;
     width: 45%;
     background-color: white;
     padding: 20px;
-    }
-.btn{
+}
+
+.btn {
     color: white;
     border: 0;
     margin-top: 5px;
 }
-.btn-geo{
-    background-color: var(--green-geo);    
+
+.btn-geo {
+    background-color: var(--green-geo);
 }
-.btn-tech{
-    background-color: var(--blue-tech);    
+
+.btn-tech {
+    background-color: var(--blue-tech);
 }
-.btn-cucina{
-    background-color: var(--purple-kitchen);    
+
+.btn-cucina {
+    background-color: var(--purple-kitchen);
 }
-.btn-viaggi{
-    background-color: var(--salmon-viaggi);    
+
+.btn-viaggi {
+    background-color: var(--salmon-viaggi);
 }
-.btn-arte{
-    background-color: var(--yellow-arte);    
+
+.btn-arte {
+    background-color: var(--yellow-arte);
 }
-.btn-none{
-    background-color: white;    
+
+.btn-none {
+    background-color: white;
 }
-h2{
+
+h2 {
     color: white;
     background-color: var(--body-bg);
     text-align: center;
-    margin-top: 30px;;
+    margin-top: 30px;
+    ;
 }
-.card{
+
+.card {
     border: 0;
     width: 45%;
+}
+
+.card:hover {
+    filter: drop-shadow(10px 10px 5px lightblue);
+    scale: 1.01;
+    text-shadow: 2px 2px 5px grey;
 }
 
 .fa-bookmark {
     position: absolute;
     right: 30px;
     top: 30px;
-    transform: scale(1.5);     
+    transform: scale(1.5);
 }
 
+option {
+    background-color: lightgray;
+}
+
+img {
+    max-width: 100%;
+}
