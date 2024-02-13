@@ -230,9 +230,7 @@ function SelectByCheck(DomEl) {
         if (e.target.checked === true) {
             FilterByCheck(News);
             IsChecked(News);
-            console.log(iBookMarks);
 
-            //console.log(IsChecked(News));    
             contElement.innerHTML = ""
             Unavailable(FilterByCheck(News))
         } else {
